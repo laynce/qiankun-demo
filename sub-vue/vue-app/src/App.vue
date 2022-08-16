@@ -7,11 +7,14 @@
       <li><router-link to="about">About页面</router-link></li>
     </ul>
     <router-view></router-view>
+    特殊服务： <button @click="change">更改用户姓名</button>
+    <span>4534554</span>
   </div>
 </template>
 
 <script>
 
+import { useStore } from 'vuex'
 
 export default {
   name: 'App',
@@ -19,22 +22,28 @@ export default {
   },
   props: ['msg'],
   setup() {
+    const store = useStore()
+    const change = ()=> {
+      let originName = store.state.userInfo.name
+      console.log(originName)
+      store.commit('updateUser', ['name', originName + '@'])
+    }
+
+    const user = store.state.userInfo
+    
     return {
-      list_v3: {
-        id: 90
-      }
+     change,
+     user
     }
   },
-  data() {
-    return {
-      a_v3: 100
-    }
-  }
 }
 </script>
 
 <style>
   ul {
     margin: 20px auto;
+  }
+  span {
+    background: green;
   }
 </style>

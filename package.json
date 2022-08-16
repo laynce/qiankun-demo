@@ -14,7 +14,10 @@
     "serve:vue-app": "cd sub-vue/vue-app && npm run serve",
     "serve:react-app": "cd sub-react/react-app && npm run start"
   },
-  "keywords": ["npm-run-all", "qiankun"],
+  "keywords": [
+    "npm-run-all",
+    "qiankun"
+  ],
   "author": "",
   "license": "ISC",
   "devDependencies": {

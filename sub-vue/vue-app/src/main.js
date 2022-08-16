@@ -2,13 +2,16 @@ import { createApp } from 'vue'
 import './public-path'
 import App from './App.vue'
 import router from '../router'
+import { setStore } from './store/index'
 
 let instance = null
 
 const render = (props) => {
-  console.log(props, 111)
-  const { container, message } = props;
-  instance = createApp(<App msg={message}/>);
+  const { container, message, getGlobalState } = props;
+  const store = setStore(getGlobalState()) // 传递主应用的state作为子应用的初始值
+
+  instance = createApp(<App msg={message} />);
+  instance.use(store)
   instance.use(router)
   instance.mount(container ? container.querySelector('#app-vue') : '#app-vue')
 }
@@ -31,5 +34,4 @@ export async function mount(props) {
 export async function unmount() {
   instance.unmount()
   instance = null
-  console.log(instance, 777)
 }

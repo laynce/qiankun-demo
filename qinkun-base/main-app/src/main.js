@@ -5,6 +5,7 @@ import router from '../router';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import { registerMicroApps, start, setDefaultMountApp } from 'qiankun'
+import action from './store';
 
 Vue.config.productionTip = false
 
@@ -17,6 +18,7 @@ new Vue({
 }).$mount('#app')
 
 
+const getGlobalState = action.getGlobalState
 // activeRule 规则匹配上的微应用就会被插入到指定的 container 中，同时依次调用微应用暴露出的生命周期钩子。
 const app = [
   {
@@ -26,6 +28,7 @@ const app = [
     activeRule: '/vue-sub',
     props: {
       message: '来自主应用的问候to-vue',
+      getGlobalState
     },
   },
   {
@@ -35,6 +38,7 @@ const app = [
     activeRule: '/react-sub',
     props: {
       message: '来自主应用的问候to-react',
+      getGlobalState
     },
   }
 ]
@@ -58,5 +62,5 @@ setDefaultMountApp("/vue-sub")
 
 // 启动
 start({
-  prefetch: true
+  sandbox: { experimentalStyleIsolation: true  }  // 样式隔离
 })
