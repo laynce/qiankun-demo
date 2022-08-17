@@ -66,7 +66,8 @@ export default {
   .item {
     line-height: 32px;
     float: left;
-    width: 160px;
+    min-width: 160px;
+    margin-right: 20px;
     margin-bottom: 10px;
   }
   .clearfix {

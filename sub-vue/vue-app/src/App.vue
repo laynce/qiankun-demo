@@ -7,8 +7,15 @@
       <li><router-link to="about">About页面</router-link></li>
     </ul>
     <router-view></router-view>
-    特殊服务： <button @click="change">更改用户姓名</button>
-    <span>4534554</span>{{user}}
+    <h3>特殊服务</h3>
+    <p>qiankun沙箱样式隔离: <span>样式测验</span></p>
+    <h3>同步主应用信息</h3>
+    <ul>
+      <li v-for="(v, k) in user" :key="k">
+        <label>{{k}}</label>: {{v}}
+      </li>
+    </ul>
+    主应用信息修改: <button @click="change">更改用户姓名</button>
   </div>
 </template>
 
