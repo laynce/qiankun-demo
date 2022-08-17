@@ -1,5 +1,6 @@
 import { initGlobalState } from 'qiankun';
 
+
 const initState = {
   userInfo: {
     name: 'laynce',
@@ -11,7 +12,7 @@ const initState = {
 const action = initGlobalState(initState)
 
 action.onGlobalStateChange((state, prev) => {
-  console.log(state, prev, '主应用state')
+  console.log(state, prev, '主应用state', initState)
 })
 
 action.getGlobalState = (key) => {

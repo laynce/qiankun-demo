@@ -2,13 +2,14 @@ import { createApp } from 'vue'
 import './public-path'
 import App from './App.vue'
 import router from '../router'
-import { setStore } from './store/index'
+import { setStore, changeStoreSate } from './store/index'
 
 let instance = null
 
 const render = (props) => {
-  const { container, message, getGlobalState } = props;
+  const { container, message, getGlobalState, onGlobalStateChange } = props;
   const store = setStore(getGlobalState()) // 传递主应用的state作为子应用的初始值
+  changeStoreSate(onGlobalStateChange, store)
 
   instance = createApp(<App msg={message} />);
   instance.use(store)
@@ -17,7 +18,13 @@ const render = (props) => {
 }
 
 if (!window.__POWERED_BY_QIANKUN__) {
-  render({})
+  render({getGlobalState: ()=> ({
+    userInfo: {
+      name: 'laynce',
+      age: 28,
+      addr: '陕西西安'
+    }
+  }), onGlobalStateChange: ()=>({})})
 }
 
 export async function bootstrap() {

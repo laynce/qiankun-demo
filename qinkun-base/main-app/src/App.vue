@@ -47,6 +47,17 @@ export default {
     setTimeout(()=> {
       this.activeUrl = location.pathname
     })
+  },
+  mounted() {
+    setTimeout(()=> {
+      action.setGlobalState({
+        userInfo: {
+          name: 'liMing',
+          age: 30,
+          addr: "北京朝阳"
+        }
+      })
+    },6000)
   }
 }
 </script>

@@ -8,11 +8,12 @@
     </ul>
     <router-view></router-view>
     特殊服务： <button @click="change">更改用户姓名</button>
-    <span>4534554</span>
+    <span>4534554</span>{{user}}
   </div>
 </template>
 
 <script>
+import { computed } from 'vue'
 
 import { useStore } from 'vuex'
 
@@ -25,11 +26,12 @@ export default {
     const store = useStore()
     const change = ()=> {
       let originName = store.state.userInfo.name
-      console.log(originName)
       store.commit('updateUser', ['name', originName + '@'])
     }
 
-    const user = store.state.userInfo
+    const user = computed(()=> {
+      return store.state.userInfo
+    })
     
     return {
      change,
