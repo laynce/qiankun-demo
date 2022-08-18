@@ -9,6 +9,8 @@
 export default {
   name: 'HomePage'
 }
+
+console.log(import.meta.env, process.env.vite)
 </script>
 
 <style scoped>

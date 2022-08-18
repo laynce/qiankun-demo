@@ -11,7 +11,7 @@
     "install:react-app": "cd sub-react/react-app && npm install",
     "serve": "npm-run-all --parallel serve:*",
     "serve:main-app": "cd qinkun-base/main-app  && npm run serve",
-    "serve:vue-app": "cd sub-vue/vue-app && npm run serve",
+    "serve:vue-app": "cd sub-vue/vue-app && npm run start",
     "serve:react-app": "cd sub-react/react-app && npm run start"
   },
   "keywords": [

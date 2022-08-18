@@ -7,6 +7,7 @@ module.exports = defineConfig({
       libraryTarget: 'umd',
       filename: 'subVue.[name].js'
     },
+    entry: './src/main.jsx'
   },
   devServer: {
     port: 5000,

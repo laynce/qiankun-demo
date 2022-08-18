@@ -5,9 +5,12 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "start": "vite"
   },
   "dependencies": {
+    "@vue/babel-plugin-jsx": "^1.1.1",
+    "cheerio": "^1.0.0-rc.12",
     "core-js": "^3.8.3",
     "vue": "^3.2.13",
     "vue-router": "^4.1.2",
@@ -16,11 +19,15 @@
   "devDependencies": {
     "@babel/core": "^7.12.16",
     "@babel/eslint-parser": "^7.12.16",
+    "@vitejs/plugin-vue": "^3.0.3",
+    "@vitejs/plugin-vue-jsx": "^2.0.0",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
     "eslint": "^7.32.0",
-    "eslint-plugin-vue": "^8.0.3"
+    "eslint-plugin-vue": "^8.0.3",
+    "vite": "^3.0.7",
+    "vite-plugin-html": "^3.2.0"
   },
   "eslintConfig": {
     "root": true,
