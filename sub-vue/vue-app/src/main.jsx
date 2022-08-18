@@ -3,7 +3,9 @@ import './public-path'
 import App from './App.vue'
 import router from '../router'
 import { setStore, changeStoreSate } from './store/index'
-import { qiankunLifecyle } from '../qiankunLegancy'
+import { createLifecyle, getMicroApp } from '../qiankunLegancy'
+
+const microApp = getMicroApp("vueApp")
 
 let instance = null
 
@@ -19,7 +21,8 @@ const render = (props) => {
   instance.mount(container ? container.querySelector('#app-vue') : '#app-vue')
 }
 
-if (!window.__POWERED_BY_QIANKUN__) {
+
+if (!microApp.__POWERED_BY_QIANKUN__) {
   render({getGlobalState: ()=> ({
     userInfo: {
       name: 'laynce',
@@ -29,8 +32,8 @@ if (!window.__POWERED_BY_QIANKUN__) {
   }), onGlobalStateChange: ()=>({})})
 }
 
-if (window.proxy && window.proxy.__POWERED_BY_QIANKUN__) {
-  qiankunLifecyle("vueApp", {
+if (microApp.__POWERED_BY_QIANKUN__) {
+  createLifecyle("vueApp", {
     mount(props) {
       console.log('props from main framework', "vue-app");
       render(props);

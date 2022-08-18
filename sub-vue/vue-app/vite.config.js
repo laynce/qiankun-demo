@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import vue from '@vitejs/plugin-vue'
 import { createHtmlPlugin } from 'vite-plugin-html'
-//import { qiankunLegancy } from './qiankunLegancy'
+import { qiankunLegancy } from './qiankunLegancy'
 // import pg from './package.json'
 export default defineConfig({
   server: {
@@ -15,15 +15,15 @@ export default defineConfig({
     vue(),
     vueJsx(),
     createHtmlPlugin({
-      entry: 'src/main.jsx',
-      template: 'public/index.html',
+      entry: '/src/main.jsx',
+      template: '/index.html',
       inject: {
         data: {
           title: 'qinakunvue子应用',
           htmlWebpackPlugin: ''
         }
       }
-    })
-    //qiankunLegancy("vueApp")
+    }),
+    qiankunLegancy("vueApp")
   ]
 })
