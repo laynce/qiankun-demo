@@ -1,43 +1,61 @@
 import cheerio from 'cheerio'
 
-export const getMicroApp = appName => window.qiankunLegancy[appName]
+export const getMicroApp = appName => {
+  const global = (0, eval)('window')
+  console.log((global.qiankunLegancy && global.qiankunLegancy[appName]),666)
+  return (global.qiankunLegancy && global.qiankunLegancy[appName]) || {
+    __POWERED_BY_QIANKUN__: window.__POWERED_BY_QIANKUN__
+  }
+}
 
 export const createLifecyle = (name, lifecyle) => {
-  window.qiankunLegancy ||= {}
-  window.qiankunLegancy[name] ||= {}
-  window.qiankunLegancy[name].lifecyle = lifecyle
+  const global = (0, eval)('window')
+  global.qiankunLegancy ||= {}
+  global.qiankunLegancy[name] ||= {}
+  global.qiankunLegancy[name].lifecyle = lifecyle
 }
 
 export const qiankunLegancy = (name) => {
   const vite = {}
 
+  const lifecyleStr = `
+    const app = global.qiankunLegancy[name]
+    window[name] = {
+      bootstrap: (...args) => app.dynamicImport.then(() => app.lifecyle.bootstrap(...args)),
+      mount: (...args) => app.dynamicImport.then(() => app.lifecyle.mount(...args)),
+      unmount: (...args) => app.dynamicImport.then(() => app.lifecyle.unmount(...args)),
+    }
+  `
+
+  const createLegancyHtml = html => {
+    return `(function () {
+      const global = (0, eval)('window')
+      const name = '${name}'
+      const proxy = global.proxy || {}
+      let publicPath = (proxy && proxy.__INJECTED_PUBLIC_PATH_BY_QIANKUN__) || ''
+      publicPath = publicPath.slice(0, publicPath.length - 1)
+      global.qiankunLegancy ||= {}
+      global.qiankunLegancy[name] ||= {}
+      
+      Object.assign(global.qiankunLegancy[name], {
+        '__INJECTED_PUBLIC_PATH_BY_QIANKUN__': proxy.__INJECTED_PUBLIC_PATH_BY_QIANKUN__,
+        '__POWERED_BY_QIANKUN__': proxy.__INJECTED_PUBLIC_PATH_BY_QIANKUN__,
+      })
+      console.log(global.qiankunLegancy[name].__INJECTED_PUBLIC_PATH_BY_QIANKUN__, 3443)
+      ${html}
+    })()`
+  }
+
   const devTransformIndexHtml = html => {
     const $ = cheerio.load(html)
     const moduleScripts = $('script[type=module]')
 
-    const createLegancyHtml = html => {
-      return `(function () {
-        const global = (0, eval)('window')
-        const name = '${name}'
-        const proxy = window.proxy || {}
-        let publicPath = (proxy && proxy.__INJECTED_PUBLIC_PATH_BY_QIANKUN__) || ''
-        publicPath = publicPath.slice(0, publicPath.length - 1)
-        global.qiankunLegancy ||= {}
-        global.qiankunLegancy[name] ||= {}
-        Object.assign(global.qiankunLegancy[name], {
-          '__INJECTED_PUBLIC_PATH_BY_QIANKUN__': proxy.__INJECTED_PUBLIC_PATH_BY_QIANKUN__,
-          '__POWERED_BY_QIANKUN__': proxy.__INJECTED_PUBLIC_PATH_BY_QIANKUN__,
-        })
-        ${html}
-      })()`
-    }
 
     Array.from(moduleScripts).forEach((el, index) => {
       const scriptEl = $(el)
       const src = scriptEl.attr('src')
       
       if (index === moduleScripts.length - 1) {
-        const html = 
         scriptEl.html(createLegancyHtml(`
           global.qiankunLegancy[name].dynamicImport = import(publicPath + '${src}')
         `))
@@ -52,14 +70,7 @@ export const qiankunLegancy = (name) => {
 
     $('body').append(`
       <script>
-        ${createLegancyHtml(`
-          const app = global.qiankunLegancy[name]
-          window[name] = {
-            bootstrap: (...args) => app.dynamicImport.then(() => app.lifecyle.bootstrap(...args)),
-            mount: (...args) => app.dynamicImport.then(() => app.lifecyle.mount(...args)),
-            unmount: (...args) => app.dynamicImport.then(() => app.lifecyle.unmount(...args)),
-          }
-        `)}
+        ${createLegancyHtml(lifecyleStr)}
       </script>
     `)
     
@@ -67,17 +78,28 @@ export const qiankunLegancy = (name) => {
   }
 
   const proTransformIndexHtml = html => {
-    console.log(html)
     const $ = cheerio.load(html)
-    console.log(Array.from($('script[type=module]')).length, '+++')
-    Array.from($('script[type=module]')).forEach(el => {
-      $(el).remove()
-    })
+    Array.from($('script[type=module]')).forEach(el => $(el).remove())
     Array.from($('script[nomodule]')).forEach(el => {
-      if (!['vite-legacy-polyfill', 'vite-legacy-entry'].includes($(el).attr('id'))) {
-        $(el).remove()
+      const scriptEl = $(el)
+      scriptEl.removeAttr('nomodule')
+      
+      if (scriptEl.attr('id') === 'vite-legacy-polyfill') {
+        console.log()
+      } else if (scriptEl.attr('id') === 'vite-legacy-entry') {
+        scriptEl.html(createLegancyHtml(`
+          global.qiankunLegancy[name].dynamicImport = System.import('${scriptEl.attr("data-src")}')
+        `))
+      } else {
+        scriptEl.remove()
       }
     })
+
+    $('body').append(`
+      <script>
+        ${createLegancyHtml(lifecyleStr)}
+      </script>
+    `)
 
     return $.html()
   }

@@ -3,7 +3,8 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import vue from '@vitejs/plugin-vue'
 import { createHtmlPlugin } from 'vite-plugin-html'
 import { qiankunLegancy } from './qiankunLegancy'
-// import pg from './package.json'
+import pg from './package.json'
+
 export default defineConfig({
   server: {
     port: 5000
@@ -15,8 +16,8 @@ export default defineConfig({
     vue(),
     vueJsx(),
     createHtmlPlugin({
-      entry: '/src/main.jsx',
       template: '/index.html',
+      entry: "/src/main.jsx",
       inject: {
         data: {
           title: 'qinakunvue子应用',
@@ -24,6 +25,6 @@ export default defineConfig({
         }
       }
     }),
-    qiankunLegancy("vueApp")
+    qiankunLegancy(pg.name)
   ]
 })

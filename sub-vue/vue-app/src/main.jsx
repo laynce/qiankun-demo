@@ -4,8 +4,9 @@ import App from './App.vue'
 import router from '../router'
 import { setStore, changeStoreSate } from './store/index'
 import { createLifecyle, getMicroApp } from '../qiankunLegancy'
+import pg from '../package.json'
 
-const microApp = getMicroApp("vueApp")
+const microApp = getMicroApp(pg.name)
 
 let instance = null
 
@@ -14,14 +15,13 @@ const render = (props) => {
   const store = setStore(getGlobalState()) // 传递主应用的state作为子应用的初始值
   changeStoreSate(onGlobalStateChange, store)
 
-  // instance = createApp(App);
-  instance = createApp(<App msg={message} />);
+  instance = createApp(<App msg={message}></App>);
   instance.use(store)
   instance.use(router)
   instance.mount(container ? container.querySelector('#app-vue') : '#app-vue')
 }
 
-
+// 子应用独立运行时 webpack或vite都支持
 if (!microApp.__POWERED_BY_QIANKUN__) {
   render({getGlobalState: ()=> ({
     userInfo: {
@@ -32,8 +32,9 @@ if (!microApp.__POWERED_BY_QIANKUN__) {
   }), onGlobalStateChange: ()=>({})})
 }
 
+// qiankun 子应用vite启动模式下运行
 if (microApp.__POWERED_BY_QIANKUN__) {
-  createLifecyle("vueApp", {
+  createLifecyle(pg.name, {
     mount(props) {
       console.log('props from main framework', "vue-app");
       render(props);
@@ -50,18 +51,20 @@ if (microApp.__POWERED_BY_QIANKUN__) {
 } 
   
 
+//  // qiankun 子应用webpack启动模式下运行
 // export async function bootstrap() {
-//   console.log('vue子应用 app bootstraped');
-// }
+//     console.log(2323)
+//     console.log('vue子应用 app bootstraped');
+//   }
 
 
-// export async function mount(props) {
-//   console.log('vue子应用 app mount');
-//   render(props)
-// }
+//   export async function mount(props) {
+//     console.log('vue子应用 app mount');
+//     render(props)
+//   }
 
 
-// export async function unmount() {
-//   instance.unmount()
-//   instance = null
-// }
+//   export async function unmount() {
+//     instance.unmount()
+//     instance = null
+//   }

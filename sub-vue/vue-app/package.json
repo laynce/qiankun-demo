@@ -3,13 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "rundelHtml": "node ./command/html.js vite",
+    "copyHtml": "node ./command/html.js",
+    "preserve": "npm run copyHtml",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
+    "prestart": "npm run rundelHtml",
     "start": "vite"
   },
   "dependencies": {
-    "@vue/babel-plugin-jsx": "^1.1.1",
     "cheerio": "^1.0.0-rc.12",
     "core-js": "^3.8.3",
     "vue": "^3.2.13",

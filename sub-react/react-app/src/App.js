@@ -1,7 +1,7 @@
 import Home from "./components/Home"
 import About from "./components/About"
 import {Routes, Route, Link } from "react-router-dom";
-
+console.log(window.aaa )
 function App(props) {
   return (
     <div className="App">
