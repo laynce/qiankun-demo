@@ -2,10 +2,7 @@ import cheerio from 'cheerio'
 
 export const getMicroApp = appName => {
   const global = (0, eval)('window')
-  console.log((global.qiankunLegancy && global.qiankunLegancy[appName]),666)
-  return (global.qiankunLegancy && global.qiankunLegancy[appName]) || {
-    __POWERED_BY_QIANKUN__: window.__POWERED_BY_QIANKUN__
-  }
+  return (global.qiankunLegancy && global.qiankunLegancy[appName]) || {}
 }
 
 export const createLifecyle = (name, lifecyle) => {
