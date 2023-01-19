@@ -1,4 +1,4 @@
-# qiankun-demo
+# qiankun-pro
 
 ### install dependencies
 ```
